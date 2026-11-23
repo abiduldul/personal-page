@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getMoments, slugifyTag, type Moment } from '../../lib';
+
+export async function getStaticPaths() {
+  const moments = await getMoments();
+  const byTag = new Map<string, { name: string; list: Moment[] }>();
+  for (const m of moments) {
+    for (const t of m.data.tags) {
+      const slug = slugifyTag(t);
+      if (!byTag.has(slug)) byTag.set(slug, { name: t, list: [] });
+      byTag.get(slug)!.list.push(m);
+    }
+  }
+  return [...byTag.entries()].map(([tag, v]) => ({ params: { tag }, props: v }));
+}
+
+interface Props { name: string; list: Moment[] }
+const { name, list } = Astro.props;
+---
+<Base title={`#${name}`}>
+  <main class="wrap">
+    <section>
+      <div class="section-head">
+        <a class="kicker" href="/moments/" style="text-decoration:none">← All moments</a>
+        <h2>#{name}</h2>
+        <p>{list.length} {list.length === 1 ? 'moment' : 'moments'}</p>
+      </div>
+      <div class="feed">{list.map((m) => <PostCard moment={m} />)}</div>
+    </section>
+  </main>
+</Base>

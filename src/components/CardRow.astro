@@ -1,0 +1,48 @@
+---
+// One "row": title + description on the left, a sideways-scrolling strip of cards on the right.
+// Put <RowCard /> components inside it.
+interface Props {
+  id?: string;
+  title: string;
+  text?: string;
+  link?: { href: string; label: string };
+}
+const { id, title, text, link } = Astro.props;
+---
+<div class="row" data-row id={id}>
+  <div class="row-intro">
+    <h2>{title}</h2>
+    {text && <p>{text}</p>}
+    {link && <a class="row-link" href={link.href}>{link.label} →</a>}
+  </div>
+  <div class="row-main">
+    <div class="row-arrows">
+      <button type="button" class="row-prev" aria-label={`Scroll ${title} left`}>←</button>
+      <button type="button" class="row-next" aria-label={`Scroll ${title} right`}>→</button>
+    </div>
+    <div class="row-track" tabindex="0" role="region" aria-label={title}>
+      <slot />
+    </div>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-row]').forEach((row) => {
+    const track = row.querySelector<HTMLElement>('.row-track')!;
+    const prev = row.querySelector<HTMLButtonElement>('.row-prev')!;
+    const next = row.querySelector<HTMLButtonElement>('.row-next')!;
+    const arrows = row.querySelector<HTMLElement>('.row-arrows')!;
+    const update = () => {
+      const max = track.scrollWidth - track.clientWidth;
+      arrows.hidden = max <= 4; // nothing to scroll: hide the arrows
+      prev.disabled = track.scrollLeft <= 4;
+      next.disabled = track.scrollLeft >= max - 4;
+    };
+    const step = () => Math.max(track.clientWidth * 0.85, 200);
+    prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+    next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+    track.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update);
+    update();
+  });
+</script>

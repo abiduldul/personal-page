@@ -1,0 +1,45 @@
+---
+import { getMoments, slugifyTag } from '../lib';
+import profile from '../data/profile.json';
+
+const moments = await getMoments();
+const counts = new Map<string, number>();
+moments.forEach((m) => m.data.tags.forEach((t) => counts.set(t, (counts.get(t) ?? 0) + 1)));
+const topTags = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 6);
+const today = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="foot-cols">
+      <div>
+        <h4>About me</h4>
+        <ul>
+          <li><a href="/#story">My story</a></li>
+          <li><a href="/#present">Life now</a></li>
+          <li><a href="/#work">Work experience</a></li>
+          <li><a href="/#rival">My rival</a></li>
+          <li><a href="/#future">Where I'm going</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Moments</h4>
+        <ul>
+          <li><a href="/moments/">All moments</a></li>
+          <li><a href="/#photos">Photos</a></li>
+          <li><a href="/#projects">Projects</a></li>
+          {topTags.map(([t]) => <li><a href={`/tags/${slugifyTag(t)}/`}>#{t}</a></li>)}
+        </ul>
+      </div>
+      <div>
+        <h4>Connect</h4>
+        <ul>
+          {profile.links.map((l) => <li><a href={l.href} target="_blank" rel="noopener">{l.platform} — {l.title}</a></li>)}
+        </ul>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <span><strong style="color:var(--ink)">{profile.name}</strong> · Surabaya → Yogyakarta · Last updated {today}</span>
+      <span>A personal project. Not affiliated with, endorsed by, or connected to NVIDIA or Jensen Huang — he is just my favourite benchmark.</span>
+    </div>
+  </div>
+</footer>

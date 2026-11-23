@@ -1,0 +1,31 @@
+---
+import Base from '../../layouts/Base.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getMoments, groupByYear, slugifyTag } from '../../lib';
+
+const moments = await getMoments();
+const years = groupByYear(moments);
+const tagCounts = new Map<string, number>();
+moments.forEach((m) => m.data.tags.forEach((t) => tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1)));
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+<Base title="Moments" description="Every moment of my life, year by year.">
+  <main class="wrap">
+    <section>
+      <div class="section-head">
+        <span class="kicker">Moments</span>
+        <h2>My life, year by year</h2>
+        <p>{moments.length} moments so far. Tap a tag to see everything about one part of my life.</p>
+      </div>
+      <div class="tag-cloud">
+        {tags.map(([t, n]) => <a class="tag" href={`/tags/${slugifyTag(t)}/`}>#{t}<small>{n}</small></a>)}
+      </div>
+      {years.map(([year, list]) => (
+        <div class="year" id={`y${year}`}>
+          <h2>{year}</h2>
+          <div class="feed">{list.map((m) => <PostCard moment={m} />)}</div>
+        </div>
+      ))}
+    </section>
+  </main>
+</Base>

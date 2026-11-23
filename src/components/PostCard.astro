@@ -1,0 +1,20 @@
+---
+import { Image } from 'astro:assets';
+import { formatDate, type Moment } from '../lib';
+
+interface Props { moment: Moment }
+const { moment } = Astro.props;
+const d = moment.data;
+const cover = d.cover ?? d.photos[0]?.src;
+---
+<a class="post" href={`/moments/${moment.id}/`}>
+  {cover
+    ? <Image src={cover} alt="" widths={[400, 800]} sizes="(max-width: 520px) 100vw, 360px" />
+    : <span class="no-photo" aria-hidden="true">{d.title[0]}</span>}
+  <span class="post-body">
+    <span class="post-meta">{formatDate(d.date, d.approx)}{d.place && ` · ${d.place}`}</span>
+    <h3>{d.title}</h3>
+    {d.summary && <p>{d.summary}</p>}
+    {d.photos.length > 1 && <span class="post-count">📷 {d.photos.length} photos</span>}
+  </span>
+</a>

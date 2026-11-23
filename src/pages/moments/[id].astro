@@ -1,0 +1,41 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Gallery from '../../components/Gallery.astro';
+import { getMoments, formatDate, slugifyTag, type Moment } from '../../lib';
+
+export async function getStaticPaths() {
+  const moments = await getMoments();
+  return moments.map((moment, i) => ({
+    params: { id: moment.id },
+    props: { moment, newer: moments[i - 1], older: moments[i + 1] },
+  }));
+}
+
+interface Props { moment: Moment; newer?: Moment; older?: Moment }
+const { moment, newer, older } = Astro.props;
+const d = moment.data;
+const { Content } = await render(moment);
+---
+<Base title={d.title} description={d.summary}>
+  <main class="wrap">
+    <article class="moment">
+      <a class="back" href="/moments/">← All moments</a>
+      <h1>{d.title}</h1>
+      <div class="meta">
+        <span class="chip">📅 <b>{formatDate(d.date, d.approx)}</b></span>
+        {d.place && <span class="chip">📍 {d.place}</span>}
+        {d.tags.map((t) => <a class="tag" href={`/tags/${slugifyTag(t)}/`}>#{t}</a>)}
+      </div>
+      <div class="prose"><Content /></div>
+      {d.photos.length > 0 && (
+        <Gallery wideEvery={false}
+          photos={d.photos.map((p) => ({ src: p.src, alt: p.alt, title: p.caption ?? d.title }))} />
+      )}
+      <nav class="pager" aria-label="More moments">
+        {older ? <a href={`/moments/${older.id}/`}>← {older.data.title}</a> : <span />}
+        {newer && <a href={`/moments/${newer.id}/`} style="text-align:right">{newer.data.title} →</a>}
+      </nav>
+    </article>
+  </main>
+</Base>

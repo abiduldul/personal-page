@@ -1,0 +1,105 @@
+[
+  {
+    "kicker": "Now · Chip Design",
+    "title": "MRISCV — my own SoC",
+    "text": "A custom RISC-V system-on-chip of my own design, built and iterated as I move from programming microcontrollers to designing the chips themselves.",
+    "tags": [
+      "RISC-V",
+      "SoC design",
+      "RTL"
+    ],
+    "group": "chip",
+    "emoji": "🧩"
+  },
+  {
+    "kicker": "Now · FPGA",
+    "title": "PicoRV32 on Lattice ECP5",
+    "text": "Running the PicoRV32 RISC-V core on a Lattice ECP5 FPGA — with a 7-segment chip decoder and SPI RAM designed around it.",
+    "tags": [
+      "Lattice ECP5",
+      "PicoRV32",
+      "SPI RAM"
+    ],
+    "group": "chip",
+    "emoji": "🔌"
+  },
+  {
+    "kicker": "Now · Hardware",
+    "title": "Handmade RF & PCB work",
+    "text": "PCB layouts in Eagle, plus components I make by hand — wound inductors and crystal ladder filters — because understanding starts at the physical level.",
+    "tags": [
+      "Eagle PCB",
+      "Inductors",
+      "Crystal filters"
+    ],
+    "group": "chip",
+    "emoji": "📡"
+  },
+  {
+    "kicker": "Vision",
+    "title": "Archery score detection",
+    "text": "Automatic archery scoring using image processing — a camera watches the target and the system detects and scores the arrows.",
+    "tags": [
+      "Image processing",
+      "Computer vision"
+    ],
+    "group": "field",
+    "emoji": "🎯"
+  },
+  {
+    "kicker": "Health Tech",
+    "title": "SpO2 & patient monitoring",
+    "text": "Patient monitoring hardware built around SpO2 sensing — measuring blood oxygen and keeping watch over the numbers that matter.",
+    "tags": [
+      "SpO2",
+      "Sensors",
+      "Embedded C"
+    ],
+    "group": "health",
+    "emoji": "🫁"
+  },
+  {
+    "kicker": "Health Tech",
+    "title": "Vaccine temperature box",
+    "text": "Temperature monitoring for vaccine storage boxes, so the cold chain stays provably cold from storage to delivery.",
+    "tags": [
+      "Temp monitoring",
+      "Data logging"
+    ],
+    "group": "health",
+    "emoji": "💉"
+  },
+  {
+    "kicker": "AgriTech",
+    "title": "Hydroponics hardware control",
+    "text": "Control hardware for hydroponic growing — automating the environment plants live in, from my time at Tanam Kota and freelance builds.",
+    "tags": [
+      "Control systems",
+      "IoT"
+    ],
+    "group": "field",
+    "emoji": "🌱"
+  },
+  {
+    "kicker": "Health Tech",
+    "title": "Plasma sterilizer monitoring",
+    "text": "Temperature monitoring for a plasma sterilizer — precision sensing where the process only works inside a tight thermal window.",
+    "tags": [
+      "Temp sensing",
+      "Monitoring"
+    ],
+    "group": "health",
+    "emoji": "🧪"
+  },
+  {
+    "kicker": "Aviation",
+    "title": "Racing plane avionics",
+    "text": "Electrical design and piloting for the Dirgantara PENS racing plane team — avionics that had to be light, reliable, and fast. Finisher, KRTI 2020.",
+    "tags": [
+      "Avionics",
+      "KRTI 2020"
+    ],
+    "group": "field",
+    "emoji": "✈️"
+  }
+]

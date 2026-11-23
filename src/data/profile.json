@@ -1,0 +1,184 @@
+{
+  "name": "Abidul Qohar",
+  "headline": "Embedded engineer, on the road to",
+  "headlineAccent": "chip design.",
+  "bio": "I'm Abidul Qohar, an embedded electronics engineer from Surabaya, now doing my master's in Yogyakarta. This page is my own corner of the internet — my past, my present, and my future, with the photos, projects, and work that come with them.",
+  "chips": [
+    "📍 From <b>Surabaya</b> · now in <b>Yogyakarta</b>",
+    "🎓 Master's student, <b>UGM</b>",
+    "🔌 Focus: <b>microcontrollers → chips</b>",
+    "🎯 Rival: <b>Jensen Huang</b>"
+  ],
+  "heroCaption": "Me, at the museum — Yogyakarta days",
+  "heroAlt": "Abidul giving a thumbs up in front of a museum display of traditional masks",
+  "ppf": [
+    {
+      "label": "Past",
+      "title": "Where I started",
+      "href": "/#story",
+      "text": "Racing planes at PENS, IoT freelance work, teaching robotics, and engineering jobs across Surabaya — the years that made me an embedded engineer."
+    },
+    {
+      "label": "Present",
+      "title": "Where I am now",
+      "href": "/#present",
+      "text": "Master's studies at UGM, Yogyakarta — and deep in chip-level work: FPGA boards, my own RISC-V SoC designs, and a photo diary of it all."
+    },
+    {
+      "label": "Future",
+      "title": "Where I'm going",
+      "href": "/#future",
+      "text": "Master electronics engineering in chip design — then build my own business in electronics engineering."
+    }
+  ],
+  "present": {
+    "title": "Yogyakarta, semester by semester",
+    "text": "Right now I'm a master's student at UGM — second semester in 2026 — spending my days between campus, the lab bench, and the mountains and beaches around Yogyakarta on weekends.",
+    "cards": [
+      {
+        "kicker": "Studying",
+        "title": "Master's at UGM",
+        "text": "Campus life in Yogyakarta — lectures, coursework, and going deeper into electronics than my bachelor's ever allowed."
+      },
+      {
+        "kicker": "Building",
+        "title": "Down to the chip level",
+        "text": "My current bench work is pure chip design territory: a Lattice ECP5 FPGA running PicoRV32, my own custom MRISCV SoC, a 7-segment chip decoder, SPI RAM, PCB layouts in Eagle, and even handmade inductors and crystal ladder filters."
+      },
+      {
+        "kicker": "Recording",
+        "title": "\"Susanto\" — my photo diary",
+        "text": "My Telegram channel is where this chapter gets documented as it happens — chip work, campus, travel, and everyday Yogyakarta life."
+      }
+    ],
+    "stats": [
+      {
+        "value": "257",
+        "label": "Photos posted on my Telegram channel"
+      },
+      {
+        "value": "49",
+        "label": "Videos in the diary"
+      },
+      {
+        "value": "~200",
+        "label": "Posts since February 2024"
+      },
+      {
+        "value": "2nd",
+        "label": "Semester of my master's, 2026"
+      }
+    ]
+  },
+  "skills": [
+    "Microcontroller programming",
+    "Circuit analysis",
+    "System integration",
+    "FPGA · Lattice ECP5",
+    "RISC-V SoC design",
+    "PCB design · Eagle",
+    "IoT systems",
+    "Embedded sensing",
+    "Image processing"
+  ],
+  "future": {
+    "headline": "In the next few years: master electronics engineering in <em>chip design</em> — then build <em>my own business</em> in electronics engineering.",
+    "text": "Every step so far points the same way. I started by programming microcontrollers; now I'm designing what goes inside them. The destination is deep chip-design mastery — and a company of my own built on it.",
+    "phases": [
+      {
+        "when": "Now — Master's Years",
+        "title": "Go deep on chip design",
+        "items": [
+          "Finish my master's at UGM strong",
+          "Keep building SoC designs — MRISCV and beyond",
+          "Master FPGA prototyping on the ECP5",
+          "Document the work in my diary as I go"
+        ]
+      },
+      {
+        "when": "Next",
+        "title": "Become a chip designer",
+        "items": [
+          "Turn student projects into a serious design portfolio",
+          "Go end-to-end: RTL, verification, layout thinking",
+          "Build a name in the electronics community"
+        ]
+      },
+      {
+        "when": "The Destination",
+        "title": "Build my own business",
+        "items": [
+          "Found an electronics engineering business",
+          "Design products — and chips — of my own",
+          "Grow it from Yogyakarta / Surabaya to the world"
+        ]
+      }
+    ]
+  },
+  "links": [
+    {
+      "platform": "LinkedIn",
+      "title": "Abidul Qohar",
+      "href": "https://www.linkedin.com/in/abidul-qohar/",
+      "text": "My professional profile — experience, projects, and education.",
+      "cta": "View profile →"
+    },
+    {
+      "platform": "Telegram Channel",
+      "title": "Susanto — @vsvsjsk",
+      "href": "https://t.me/vsvsjsk",
+      "text": "\"Your Life ya your life\" — my photo diary since Feb 2024: 257 photos, 49 videos, and counting.",
+      "cta": "Follow the diary →"
+    },
+    {
+      "platform": "Telegram DM",
+      "title": "@abidulqohar",
+      "href": "https://t.me/abidulqohar",
+      "text": "Want to talk electronics? My pinned post says it plainly: DM me about electronics stuff.",
+      "cta": "Say hello →"
+    }
+  ],
+  "rival": {
+    "kicker": "Rival",
+    "title": "My rival: Jensen Huang",
+    "text": "Everyone needs a benchmark. Mine is the person who turned chips into the engine of modern computing. A one-sided rivalry — he doesn't know I exist yet — but it keeps my bar high.",
+    "them": {
+      "label": "The benchmark",
+      "name": "Jensen Huang",
+      "sub": "Co-founder & CEO, NVIDIA",
+      "points": [
+        "Co-founded NVIDIA in 1993 and has led it as CEO ever since",
+        "Built a company around GPUs, CUDA and AI computing",
+        "Proof that a chip company can change the whole world"
+      ]
+    },
+    "me": {
+      "label": "The challenger",
+      "name": "Abidul Qohar",
+      "sub": "Master's student & embedded engineer",
+      "points": [
+        "Designing my own RISC-V SoC (MRISCV) and running PicoRV32 on a Lattice ECP5 FPGA",
+        "Moving from programming microcontrollers to designing the chips inside them",
+        "Goal: build my own electronics engineering business"
+      ]
+    },
+    "note": "Rivals are how I measure how far I still have to go. The plan is simple: learn chip design deeply, build real products, and keep shipping."
+  },
+  "projectGroups": [
+    {
+      "id": "chip",
+      "title": "Chip design & hardware",
+      "text": "Where I'm heading: my own RISC-V SoC, FPGA prototyping, and hardware I build by hand."
+    },
+    {
+      "id": "health",
+      "title": "Health tech",
+      "text": "Monitoring hardware where the numbers really matter: blood oxygen, vaccines and sterilization."
+    },
+    {
+      "id": "field",
+      "title": "Vision, farming & flight",
+      "text": "Earlier builds: cameras that score archery, hydroponic controllers, and racing plane avionics."
+    }
+  ]
+}

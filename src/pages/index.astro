@@ -1,0 +1,178 @@
+---
+import Base from '../layouts/Base.astro';
+import HeroCarousel from '../components/HeroCarousel.astro';
+import CardRow from '../components/CardRow.astro';
+import RowCard from '../components/RowCard.astro';
+import { getMoments, formatDate, albumLabel, albumText } from '../lib';
+import profile from '../data/profile.json';
+import projects from '../data/projects.json';
+import experience from '../data/experience.json';
+
+const moments = await getMoments();
+const milestones = moments.filter((m) => m.data.milestone).reverse(); // oldest first
+const latest = moments.slice(0, 12);
+
+// One row of photos per album (campus, coast, mountains, ...)
+const albums = [...new Set(moments.map((m) => m.data.album).filter((a): a is string => !!a))];
+const photoRows = albums.map((album) => ({
+  album,
+  photos: moments
+    .filter((m) => m.data.album === album)
+    .flatMap((m) => m.data.photos.map((p) => ({ ...p, moment: m }))),
+}));
+
+const projectRows = profile.projectGroups.map((g) => ({ ...g, items: projects.filter((p) => p.group === g.id) }));
+---
+<Base>
+  <HeroCarousel moments={moments} />
+
+  <main class="wrap">
+    <div class="ppf" aria-label="Past, present and future">
+      {profile.ppf.map((p) => <a href={p.href}><small>{p.label}</small><h3>{p.title}</h3><p>{p.text}</p></a>)}
+    </div>
+
+    <section id="story">
+      <div class="section-head">
+        <span class="kicker">01 — Past · My Story</span>
+        <h2>How I got here</h2>
+        <p>An embedded electronics enthusiast from the start — focused on microcontroller programming, circuit analysis, and system integration. This is the road so far.</p>
+      </div>
+      <div class="timeline">
+        {milestones.map((m) => (
+          <div class="t-item">
+            <div class="when">{formatDate(m.data.date, m.data.approx)}{m.data.place && ` · ${m.data.place}`}</div>
+            <h3><a href={`/moments/${m.id}/`}>{m.data.title}</a></h3>
+            {m.data.summary && <p>{m.data.summary}</p>}
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+
+  <div class="band" id="present">
+    <div class="wrap">
+      <section style="padding:38px 0">
+        <div class="section-head">
+          <span class="kicker">02 — Present · Life Now</span>
+          <h2>{profile.present.title}</h2>
+          <p>{profile.present.text}</p>
+        </div>
+        <div class="grid3">
+          {profile.present.cards.map((c) => <article class="card"><span class="num">{c.kicker}</span><h3>{c.title}</h3><p>{c.text}</p></article>)}
+        </div>
+        <div class="stats">
+          {profile.present.stats.map((s) => <div class="stat"><strong>{s.value}</strong><span>{s.label}</span></div>)}
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <main class="wrap">
+    <section id="moments" class="rows">
+      <span class="kicker">03 — Moments</span>
+      <CardRow title="Latest moments" text="My life as a feed. Every moment has its own page with the full story and photos." link={{ href: '/moments/', label: `See all ${moments.length} moments` }}>
+        {latest.map((m) => (
+          <RowCard
+            href={`/moments/${m.id}/`}
+            label={`Moment${m.data.album ? ` | ${albumLabel(m.data.album)}` : ''}`}
+            title={m.data.title}
+            text={m.data.summary}
+            image={m.data.cover ?? m.data.photos[0]?.src}
+            alt={m.data.photos[0]?.alt}
+            emoji={m.data.milestone ? '🧭' : '📍'}
+          />
+        ))}
+      </CardRow>
+    </section>
+
+    <section id="photos" class="rows">
+      <span class="kicker">04 — Photos</span>
+      {photoRows.map((r) => (
+        <CardRow title={albumLabel(r.album)} text={albumText(r.album)}>
+          {r.photos.map((p) => (
+            <RowCard
+              href={`/moments/${p.moment.id}/`}
+              label={`Photo | ${p.moment.data.place ?? formatDate(p.moment.data.date, p.moment.data.approx)}`}
+              title={p.caption ?? p.moment.data.title}
+              text={formatDate(p.moment.data.date, p.moment.data.approx)}
+              image={p.src}
+              alt={p.alt}
+            />
+          ))}
+        </CardRow>
+      ))}
+      <p class="section-foot">More photos on my Telegram diary, <a href="https://t.me/vsvsjsk" target="_blank" rel="noopener">Susanto (@vsvsjsk)</a>.</p>
+    </section>
+
+    <section id="projects" class="rows">
+      <span class="kicker">05 — Projects</span>
+      {projectRows.map((g) => (
+        <CardRow title={g.title} text={g.text}>
+          {g.items.map((p) => <RowCard label={p.kicker} title={p.title} text={p.text} emoji={p.emoji} tags={p.tags} />)}
+        </CardRow>
+      ))}
+    </section>
+
+    <section id="work">
+      <div class="section-head">
+        <span class="kicker">06 — Work</span>
+        <h2>Experience</h2>
+        <p>The roles behind the projects — engineering, teaching, and building for clients.</p>
+      </div>
+      <div class="work-list">
+        {experience.map((w) => <div class="work-row"><div class="when">{w.when}</div><div><h3>{w.title}</h3><p>{w.text}</p></div></div>)}
+      </div>
+      <div class="skills" aria-label="Skills">{profile.skills.map((s) => <span class="skill">{s}</span>)}</div>
+    </section>
+
+    <section id="rival">
+      <div class="section-head">
+        <span class="kicker">07 — {profile.rival.kicker}</span>
+        <h2>{profile.rival.title}</h2>
+        <p>{profile.rival.text}</p>
+      </div>
+      <div class="versus">
+        <div class="v-side rival">
+          <small>{profile.rival.them.label}</small>
+          <h3>{profile.rival.them.name}</h3>
+          <p class="sub">{profile.rival.them.sub}</p>
+          <ul>{profile.rival.them.points.map((x) => <li>{x}</li>)}</ul>
+        </div>
+        <div class="v-mid" aria-hidden="true">VS</div>
+        <div class="v-side">
+          <small>{profile.rival.me.label}</small>
+          <h3>{profile.rival.me.name}</h3>
+          <p class="sub">{profile.rival.me.sub}</p>
+          <ul>{profile.rival.me.points.map((x) => <li>{x}</li>)}</ul>
+        </div>
+      </div>
+      <p class="rival-note">{profile.rival.note}</p>
+    </section>
+
+    <section id="future">
+      <div class="purpose">
+        <span class="kicker">08 — Future · Big Purpose</span>
+        <h2 set:html={profile.future.headline} />
+        <p>{profile.future.text}</p>
+      </div>
+      <div class="roadmap">
+        {profile.future.phases.map((ph) => (
+          <div class="phase"><small>{ph.when}</small><h3>{ph.title}</h3><ul>{ph.items.map((i) => <li>{i}</li>)}</ul></div>
+        ))}
+      </div>
+    </section>
+
+    <section id="connect">
+      <div class="section-head">
+        <span class="kicker">09 — Connect</span>
+        <h2>Find me here</h2>
+        <p>This page is my home base — but the conversation happens on these.</p>
+      </div>
+      <div class="connect-grid">
+        {profile.links.map((l) => (
+          <a class="connect-card" href={l.href} target="_blank" rel="noopener"><span class="plat">{l.platform}</span><h3>{l.title}</h3><p>{l.text}</p><span class="go">{l.cta}</span></a>
+        ))}
+      </div>
+    </section>
+  </main>
+</Base>

@@ -1,0 +1,126 @@
+---
+// Rotating hero: slide 1 introduces me, the next slides feature my latest moments with photos.
+// Each tab has a progress line; when it fills up, the next slide shows. Hover/focus or the pause button stops it.
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import profile from '../data/profile.json';
+import heroImg from '../assets/hero.jpg';
+import { formatDate, type Moment } from '../lib';
+
+interface Props { moments: Moment[] }
+const { moments } = Astro.props;
+
+const SECONDS = 7;
+const variants = ['v-black', 'v-indigo', 'v-teal', 'v-slate'];
+const slides = moments
+  .map((m) => ({ m, image: (m.data.cover ?? m.data.photos[0]?.src) as ImageMetadata | undefined }))
+  .filter((s): s is { m: Moment; image: ImageMetadata } => !!s.image)
+  .slice(0, 5)
+  .map((s, i) => ({ ...s, variant: variants[i % variants.length] }));
+const total = slides.length + 1;
+---
+<section class="hero-carousel" data-hero style={`--dur:${SECONDS}s`} aria-roledescription="carousel" aria-label="Featured">
+  <div class="slides">
+    <div class="slide v-navy active" role="group" aria-roledescription="slide" aria-label={`1 of ${total}`}>
+      <div class="wrap hero-grid">
+        <div>
+          <div class="eyebrow">{profile.name} — Personal Page</div>
+          <h1>{profile.headline} <em>{profile.headlineAccent}</em></h1>
+          <p class="lead">{profile.bio}</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/moments/">See my moments →</a>
+            <a class="btn" href="#projects">My projects</a>
+          </div>
+          <div class="meta-row">
+            {profile.chips.map((c) => <span class="chip" set:html={c} />)}
+          </div>
+        </div>
+        <figure class="hero-photo">
+          <Image src={heroImg} alt={profile.heroAlt} widths={[480, 900]} sizes="(max-width: 860px) 100vw, 460px" loading="eager" />
+          <figcaption>{profile.heroCaption}</figcaption>
+        </figure>
+      </div>
+    </div>
+
+    {slides.map(({ m, image, variant }, i) => (
+      <div class={`slide ${variant}`} role="group" aria-roledescription="slide" aria-label={`${i + 2} of ${total}`} aria-hidden="true" inert>
+        <div class="wrap hero-grid">
+          <div>
+            <div class="eyebrow">{formatDate(m.data.date, m.data.approx)}{m.data.place && ` · ${m.data.place}`}</div>
+            <h2 class="slide-title">{m.data.title}</h2>
+            {m.data.summary && <p class="lead">{m.data.summary}</p>}
+            <div class="hero-actions">
+              <a class="btn btn-primary" href={`/moments/${m.id}/`}>Read the story →</a>
+              <a class="btn" href="/moments/">All moments</a>
+            </div>
+          </div>
+          <figure class="hero-photo">
+            <Image src={image} alt={m.data.photos[0]?.alt ?? m.data.title} widths={[480, 900]} sizes="(max-width: 860px) 100vw, 460px" />
+            {m.data.photos[0]?.caption && <figcaption>{m.data.photos[0].caption}</figcaption>}
+          </figure>
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="hero-tabs">
+    <div class="wrap tabs-inner">
+      <div class="tab-list">
+        <button type="button" class="hero-tab active" aria-current="true" aria-label="Show slide 1: About me">
+          <span class="bar"></span><small>About me</small><span class="tab-title">{profile.headline} {profile.headlineAccent}</span>
+        </button>
+        {slides.map(({ m }, i) => (
+          <button type="button" class="hero-tab" aria-label={`Show slide ${i + 2}: ${m.data.title}`}>
+            <span class="bar"></span><small>Moment{m.data.album ? ` | ${m.data.album}` : ''}</small><span class="tab-title">{m.data.title}</span>
+          </button>
+        ))}
+      </div>
+      <button type="button" class="hero-pause" aria-label="Pause slideshow" aria-pressed="false">❚❚</button>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-hero]');
+  if (root) {
+    const slides = [...root.querySelectorAll<HTMLElement>('.slide')];
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('.hero-tab')];
+    const pauseBtn = root.querySelector<HTMLButtonElement>('.hero-pause')!;
+    let current = 0;
+    let userPaused = false;
+
+    function show(n: number) {
+      current = (n + slides.length) % slides.length;
+      slides.forEach((s, k) => {
+        const on = k === current;
+        s.classList.toggle('active', on);
+        s.toggleAttribute('inert', !on);
+        s.setAttribute('aria-hidden', String(!on));
+      });
+      // Remove "active" from every tab first so the progress animation restarts from zero.
+      tabs.forEach((t) => { t.classList.remove('active'); t.removeAttribute('aria-current'); });
+      void root!.offsetWidth;
+      tabs[current].classList.add('active');
+      tabs[current].setAttribute('aria-current', 'true');
+    }
+
+    // The progress bar finishing = time for the next slide. (No animation with reduced motion = no autoplay.)
+    tabs.forEach((t, k) => {
+      t.addEventListener('click', () => show(k));
+      t.querySelector('.bar')!.addEventListener('animationend', () => { if (k === current) show(current + 1); });
+    });
+
+    const setPaused = (p: boolean) => root.classList.toggle('paused', p);
+    pauseBtn.addEventListener('click', () => {
+      userPaused = !userPaused;
+      pauseBtn.setAttribute('aria-pressed', String(userPaused));
+      pauseBtn.setAttribute('aria-label', userPaused ? 'Play slideshow' : 'Pause slideshow');
+      pauseBtn.textContent = userPaused ? '▶' : '❚❚';
+      setPaused(userPaused);
+    });
+    root.addEventListener('mouseenter', () => setPaused(true));
+    root.addEventListener('mouseleave', () => setPaused(userPaused));
+    root.addEventListener('focusin', () => setPaused(true));
+    root.addEventListener('focusout', () => setPaused(userPaused));
+  }
+</script>
