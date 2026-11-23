@@ -261,7 +261,10 @@ It's the same idea as an interrupt handler: an event happens → your function r
 **Try it.**
 1. Read the script in `CardRow.astro` and match each line to what you see when you click an arrow.
 2. Add `console.log('scrolled', track.scrollLeft);` inside the `update` function. Open DevTools → **Console**, scroll a row, see your message. This is your serial-monitor debugging.
-3. Read the script in `HeroCarousel.astro`. The progress bar is a CSS animation; when it finishes (`animationend`), the script shows the next slide. Pausing just pauses that animation.
+3. Read the script at the bottom of `src/layouts/Base.astro`. It adds the fade-up effect when a section scrolls into view, counts the numbers up, and highlights the menu link of the section you're reading. The CSS for it is at the very end of `global.css` (search for `Animations`). Try changing `translate:0 26px` to `translate:0 80px` to see the sections rise from farther away.
+4. Read the script in `HeroCarousel.astro`. The progress bar is a CSS animation; when it finishes (`animationend`), the script shows the next slide. Pausing just pauses that animation.
+
+**Good manners:** every animation switches off for visitors who turned on "reduce motion" in their system settings. That's the `prefers-reduced-motion` rule in `global.css`, plus a check at the top of the Base script.
 
 **Read more:** [MDN — JavaScript first steps](https://developer.mozilla.org/en-US/docs/Learn_web_development/Core/Scripting)
 

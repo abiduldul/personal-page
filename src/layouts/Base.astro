@@ -22,8 +22,10 @@ const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script is:inline>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+  <div class="scroll-progress" aria-hidden="true"></div>
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="/"><span class="brand-mark">{profile.name[0]}</span><span>{profile.name}</span></a>
@@ -42,5 +44,76 @@ const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — 
   <slot />
 
   <SiteFooter />
+
+  <script>
+    // Motion: scroll reveal, number count-up, and highlighting the current section in the menu.
+    // Everything here is skipped when the visitor asked their system for reduced motion.
+    const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (!reduce) {
+      const targets = [
+        '.section-head', '.ppf a', '.t-item', '.card', '.stat', '.rows > .kicker', '.row', '.work-row',
+        '.skills', '.v-side', '.v-mid', '.rival-note', '.purpose', '.phase', '.connect-card',
+        '.foot-cols > div', '.tag-cloud', '.year', '.moment > *',
+      ].join(',');
+
+      const countUp = (el: HTMLElement) => {
+        const m = (el.textContent ?? '').match(/^(\D*)(\d+)(.*)$/);
+        if (!m) return;
+        const [, pre, num, post] = m;
+        if (/^[a-z]/i.test(post)) return; // "2nd" stays as is; only plain numbers count up
+        const end = Number(num);
+        const start = performance.now();
+        const tick = (now: number) => {
+          const p = Math.min((now - start) / 1100, 1);
+          el.textContent = pre + Math.round(end * (1 - Math.pow(1 - p, 3))) + post;
+          if (p < 1) requestAnimationFrame(tick);
+        };
+        el.textContent = pre + '0' + post;
+        requestAnimationFrame(tick);
+      };
+
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            const el = e.target as HTMLElement;
+            el.classList.add('in');
+            io.unobserve(el);
+            if (el.matches('.stat')) {
+              const n = el.querySelector<HTMLElement>('strong');
+              if (n) countUp(n);
+            }
+          });
+        },
+        { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
+      );
+
+      document.querySelectorAll<HTMLElement>(targets).forEach((el) => {
+        const i = el.parentElement ? [...el.parentElement.children].indexOf(el) : 0;
+        el.style.setProperty('--d', Math.min(i, 6) * 80 + 'ms'); // stagger siblings
+        el.classList.add('reveal');
+        io.observe(el);
+      });
+    }
+
+    // Highlight the menu link of the section being read (home page only)
+    const links = [...document.querySelectorAll<HTMLAnchorElement>('.nav-links a')];
+    const secs = ['story', 'moments', 'photos', 'projects', 'work', 'rival', 'connect']
+      .map((id) => document.getElementById(id))
+      .filter((s): s is HTMLElement => !!s);
+    if (secs.length) {
+      const spy = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => {
+            if (!e.isIntersecting) return;
+            links.forEach((a) => a.classList.toggle('active', a.getAttribute('href') === `/#${e.target.id}`));
+          });
+        },
+        { rootMargin: '-40% 0px -55% 0px' },
+      );
+      secs.forEach((s) => spy.observe(s));
+    }
+  </script>
 </body>
 </html>

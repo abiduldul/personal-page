@@ -338,3 +338,53 @@ section[id],.band[id]{scroll-margin-top:64px}
   body{font-size:17px}
   .feed{grid-template-columns:repeat(5,1fr)}
 }
+
+
+/* ---------- Animations (all switched off by prefers-reduced-motion) ---------- */
+@keyframes rise{from{opacity:0; transform:translateY(22px)} to{opacity:1; transform:none}}
+@keyframes kenburns{from{transform:scale(1.1)} to{transform:scale(1)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes gridDrift{to{background-position:48px 48px}}
+@keyframes vsPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,0)} 50%{box-shadow:0 0 30px 3px rgba(37,99,235,.6)}}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(76,155,255,.7)} 100%{box-shadow:0 0 0 12px rgba(76,155,255,0)}}
+@keyframes progress{to{transform:scaleX(1)}}
+
+/* Hero: text rises in one by one, photo slowly zooms out, circuit grid drifts */
+.slide.active .hero-grid>div>*{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
+.slide.active .hero-grid>div>*:nth-child(2){animation-delay:.08s}
+.slide.active .hero-grid>div>*:nth-child(3){animation-delay:.16s}
+.slide.active .hero-grid>div>*:nth-child(4){animation-delay:.24s}
+.slide.active .hero-grid>div>*:nth-child(5){animation-delay:.32s}
+.slide.active .hero-photo{animation:rise 1s .15s cubic-bezier(.2,.7,.2,1) both}
+.hero-photo{overflow:hidden}
+.slide.active .hero-photo img{animation:kenburns 9s ease-out both}
+h1 em{background:linear-gradient(90deg,#4C9BFF 0%,#A5E8FF 50%,#4C9BFF 100%); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shimmer 5s linear infinite}
+.slides{position:relative}
+.slides::after{content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:linear-gradient(rgba(76,155,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(76,155,255,.09) 1px,transparent 1px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(ellipse at 75% 35%,#000 0%,transparent 68%); mask-image:radial-gradient(ellipse at 75% 35%,#000 0%,transparent 68%);
+  animation:gridDrift 14s linear infinite}
+
+/* Hover: cards lift, card photos zoom */
+.card,.rcard,.post,.connect-card,.stat{transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease}
+.card:hover,a.rcard:hover,.post:hover,.connect-card:hover{transform:translateY(-4px); box-shadow:0 16px 34px -20px rgba(37,99,235,.7)}
+.rcard img,.post img{transition:transform .5s ease}
+a.rcard:hover img,.post:hover img{transform:scale(1.06)}
+.btn{transition:transform .2s ease, background .2s ease, border-color .2s ease}
+.btn:hover{transform:translateY(-2px)}
+.nav-links a{transition:color .2s ease, background .2s ease}
+
+/* Small life: pulsing VS badge and "you are here" dot on the timeline */
+.v-mid{animation:vsPulse 2.8s ease-in-out infinite}
+.t-item:last-child::before{animation:ping 2s ease-out infinite}
+
+/* Scroll progress line at the very top (browsers that support scroll-driven animations) */
+.scroll-progress{position:fixed; top:0; left:0; right:0; height:3px; background:var(--accent); transform:scaleX(0); transform-origin:left; z-index:60; display:none}
+@supports (animation-timeline: scroll()){ .scroll-progress{display:block; animation:progress linear both; animation-timeline:scroll(root)} }
+
+/* Scroll reveal: JS adds .reveal, then .in when the element enters the screen.
+   Uses the separate "translate" property so it never fights with the hover "transform". */
+.js .reveal{opacity:0; translate:0 26px;
+  transition:opacity .7s ease var(--d,0ms), translate .7s cubic-bezier(.2,.7,.2,1) var(--d,0ms), transform .25s ease, border-color .25s ease, box-shadow .25s ease}
+.js .reveal.in{opacity:1; translate:0 0}
