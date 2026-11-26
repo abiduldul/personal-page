@@ -6,6 +6,7 @@ place: "Surabaya"
 summary: "Three years of freelance IoT projects: sensors, monitoring systems, and connected devices for real clients."
 tags: [freelance, iot, work]
 milestone: true
+emoji: "📡"
 ---
 
 Three years (2020 — 2023) of freelance IoT projects: sensors, monitoring systems, and connected

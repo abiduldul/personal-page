@@ -11,26 +11,6 @@
   ],
   "heroCaption": "Me, at the museum — Yogyakarta days",
   "heroAlt": "Abidul giving a thumbs up in front of a museum display of traditional masks",
-  "ppf": [
-    {
-      "label": "Past",
-      "title": "Where I started",
-      "href": "/#story",
-      "text": "Racing planes at PENS, IoT freelance work, teaching robotics, and engineering jobs across Surabaya — the years that made me an embedded engineer."
-    },
-    {
-      "label": "Present",
-      "title": "Where I am now",
-      "href": "/#present",
-      "text": "Master's studies at UGM, Yogyakarta — and deep in chip-level work: FPGA boards, my own RISC-V SoC designs, and a photo diary of it all."
-    },
-    {
-      "label": "Future",
-      "title": "Where I'm going",
-      "href": "/#future",
-      "text": "Master electronics engineering in chip design — then build my own business in electronics engineering."
-    }
-  ],
   "present": {
     "title": "Yogyakarta, semester by semester",
     "text": "Right now I'm a master's student at UGM — second semester in 2026 — spending my days between campus, the lab bench, and the mountains and beaches around Yogyakarta on weekends.",
@@ -138,32 +118,6 @@
       "cta": "Say hello →"
     }
   ],
-  "rival": {
-    "kicker": "Rival",
-    "title": "My rival: Jensen Huang",
-    "text": "Everyone needs a benchmark. Mine is the person who turned chips into the engine of modern computing. A one-sided rivalry — he doesn't know I exist yet — but it keeps my bar high.",
-    "them": {
-      "label": "The benchmark",
-      "name": "Jensen Huang",
-      "sub": "Co-founder & CEO, NVIDIA",
-      "points": [
-        "Co-founded NVIDIA in 1993 and has led it as CEO ever since",
-        "Built a company around GPUs, CUDA and AI computing",
-        "Proof that a chip company can change the whole world"
-      ]
-    },
-    "me": {
-      "label": "The challenger",
-      "name": "Abidul Qohar",
-      "sub": "Master's student & embedded engineer",
-      "points": [
-        "Designing my own RISC-V SoC (MRISCV) and running PicoRV32 on a Lattice ECP5 FPGA",
-        "Moving from programming microcontrollers to designing the chips inside them",
-        "Goal: build my own electronics engineering business"
-      ]
-    },
-    "note": "Rivals are how I measure how far I still have to go. The plan is simple: learn chip design deeply, build real products, and keep shipping."
-  },
   "projectGroups": [
     {
       "id": "chip",

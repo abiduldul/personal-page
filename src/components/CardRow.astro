@@ -1,5 +1,10 @@
 ---
-// One "row": title + description on the left, a sideways-scrolling strip of cards on the right.
+// One "row", NVIDIA style:
+//  - the title and the arrows sit in the centered container,
+//  - the description sits on the left, UNDER the cards,
+//  - the strip of cards is as wide as the whole screen. At first it starts to the right of the description
+//    and runs off the right edge; when you scroll, the cards slide left over the empty area, all the way
+//    to the left edge of the screen (and the description fades away).
 // Put <RowCard /> components inside it.
 interface Props {
   id?: string;
@@ -10,15 +15,17 @@ interface Props {
 const { id, title, text, link } = Astro.props;
 ---
 <div class="row" data-row id={id}>
-  <div class="row-intro">
+  <div class="row-head">
     <h2>{title}</h2>
-    {text && <p>{text}</p>}
-    {link && <a class="row-link" href={link.href}>{link.label} →</a>}
-  </div>
-  <div class="row-main">
     <div class="row-arrows">
       <button type="button" class="row-prev" aria-label={`Scroll ${title} left`}>←</button>
       <button type="button" class="row-next" aria-label={`Scroll ${title} right`}>→</button>
+    </div>
+  </div>
+  <div class="row-stage">
+    <div class="row-intro">
+      {text && <p>{text}</p>}
+      {link && <a class="row-link" href={link.href}>{link.label} →</a>}
     </div>
     <div class="row-track" tabindex="0" role="region" aria-label={title}>
       <slot />
@@ -32,13 +39,25 @@ const { id, title, text, link } = Astro.props;
     const prev = row.querySelector<HTMLButtonElement>('.row-prev')!;
     const next = row.querySelector<HTMLButtonElement>('.row-next')!;
     const arrows = row.querySelector<HTMLElement>('.row-arrows')!;
+
     const update = () => {
       const max = track.scrollWidth - track.clientWidth;
-      arrows.hidden = max <= 4; // nothing to scroll: hide the arrows
+      arrows.hidden = max <= 40; // (almost) nothing to scroll: hide the arrows
       prev.disabled = track.scrollLeft <= 4;
       next.disabled = track.scrollLeft >= max - 4;
+      row.classList.toggle('scrolled', track.scrollLeft > 24); // fades the description away
     };
-    const step = () => Math.max(track.clientWidth * 0.85, 200);
+
+    // One arrow click moves about half of the visible cards (at least one).
+    const step = () => {
+      const card = track.querySelector<HTMLElement>('.rcard');
+      if (!card) return 300;
+      const gap = parseFloat(getComputedStyle(track).columnGap) || 16;
+      const unit = card.getBoundingClientRect().width + gap;
+      const visible = Math.max(1, Math.floor(track.clientWidth / unit));
+      return unit * Math.max(1, Math.floor(visible / 2));
+    };
+
     prev.addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
     next.addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
     track.addEventListener('scroll', update, { passive: true });

@@ -6,6 +6,7 @@ place: "Surabaya"
 summary: "Teaching robotics at Summa Edu and building embedded systems for urban farming at Tanam Kota."
 tags: [teaching, robotics, agritech, work]
 milestone: true
+emoji: "🤖"
 ---
 
 Robotics Trainer at Summa Edu, teaching the next builders — and Embedded / Electrical System work

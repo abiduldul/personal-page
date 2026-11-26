@@ -15,7 +15,8 @@ body{margin:0; background:var(--bg); color:var(--ink); font-family:"Inter",syste
 a{color:inherit}
 button{font:inherit; min-height:44px}
 img{display:block; max-width:100%; height:auto}
-.wrap{max-width:2000px; margin:0 auto; padding:0 clamp(20px,4vw,72px)}
+:root{--gutter:clamp(20px,4vw,72px); --bleed:calc(var(--gutter) + max(0px,(100vw - 2000px)/2))}
+.wrap{max-width:2000px; margin:0 auto; padding:0 var(--gutter)}
 /* NAV */
 .nav{position:sticky; top:0; z-index:30; background:color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter:blur(12px); border-bottom:1px solid var(--line)}
 .nav-inner{display:flex; align-items:center; justify-content:space-between; gap:16px; padding:12px 0}
@@ -222,21 +223,6 @@ h1{letter-spacing:-.035em; line-height:1.02}
 .band{background:linear-gradient(180deg,#07101F,#05070C)}
 .stat strong{color:var(--accent); font-weight:700}
 
-/* Rival: head-to-head */
-.versus{display:grid; grid-template-columns:1fr auto 1fr; gap:0; align-items:stretch; border:1px solid var(--line); border-radius:6px; overflow:hidden; background:var(--surface)}
-@media(max-width:760px){ .versus{grid-template-columns:1fr} }
-.v-side{padding:26px}
-.v-side small{font-weight:800; letter-spacing:.12em; text-transform:uppercase; font-size:11.5px; color:var(--accent)}
-.v-side h3{font-size:26px; margin:6px 0 4px; letter-spacing:-.02em}
-.v-side .sub{color:var(--muted); font-size:14px; margin:0 0 16px}
-.v-side ul{margin:0; padding:0; list-style:none; display:grid; gap:10px}
-.v-side li{font-size:15px; color:var(--ink2); padding-left:18px; position:relative}
-.v-side li::before{content:""; position:absolute; left:0; top:.6em; width:8px; height:2px; background:var(--accent)}
-.v-side.rival{background:var(--surface2)}
-.v-side.rival small{color:var(--muted)}
-.v-mid{display:grid; place-items:center; padding:0 6px; font-weight:800; letter-spacing:.2em; color:var(--bg); background:var(--btn); font-size:15px; min-width:56px; color:#fff}
-@media(max-width:760px){ .v-mid{padding:10px 0} }
-.rival-note{margin:16px 0 0; color:var(--muted); font-size:15px; max-width:760px}
 .disclaimer{font-size:12.5px; color:var(--muted); max-width:760px; margin:0 0 6px}
 
 
@@ -341,30 +327,16 @@ section[id],.band[id]{scroll-margin-top:64px}
 
 
 /* ---------- Animations (all switched off by prefers-reduced-motion) ---------- */
-@keyframes rise{from{opacity:0; transform:translateY(22px)} to{opacity:1; transform:none}}
-@keyframes kenburns{from{transform:scale(1.1)} to{transform:scale(1)}}
-@keyframes shimmer{to{background-position:-200% 0}}
-@keyframes gridDrift{to{background-position:48px 48px}}
-@keyframes vsPulse{0%,100%{box-shadow:0 0 0 0 rgba(37,99,235,0)} 50%{box-shadow:0 0 30px 3px rgba(37,99,235,.6)}}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(76,155,255,.7)} 100%{box-shadow:0 0 0 12px rgba(76,155,255,0)}}
 @keyframes progress{to{transform:scaleX(1)}}
 
-/* Hero: text rises in one by one, photo slowly zooms out, circuit grid drifts */
-.slide.active .hero-grid>div>*{animation:rise .8s cubic-bezier(.2,.7,.2,1) both}
-.slide.active .hero-grid>div>*:nth-child(2){animation-delay:.08s}
-.slide.active .hero-grid>div>*:nth-child(3){animation-delay:.16s}
-.slide.active .hero-grid>div>*:nth-child(4){animation-delay:.24s}
-.slide.active .hero-grid>div>*:nth-child(5){animation-delay:.32s}
-.slide.active .hero-photo{animation:rise 1s .15s cubic-bezier(.2,.7,.2,1) both}
 .hero-photo{overflow:hidden}
-.slide.active .hero-photo img{animation:kenburns 9s ease-out both}
-h1 em{background:linear-gradient(90deg,#4C9BFF 0%,#A5E8FF 50%,#4C9BFF 100%); background-size:200% 100%; -webkit-background-clip:text; background-clip:text; color:transparent; animation:shimmer 5s linear infinite}
 .slides{position:relative}
 .slides::after{content:""; position:absolute; inset:0; pointer-events:none;
   background-image:linear-gradient(rgba(76,155,255,.09) 1px,transparent 1px),linear-gradient(90deg,rgba(76,155,255,.09) 1px,transparent 1px);
   background-size:48px 48px;
   -webkit-mask-image:radial-gradient(ellipse at 75% 35%,#000 0%,transparent 68%); mask-image:radial-gradient(ellipse at 75% 35%,#000 0%,transparent 68%);
-  animation:gridDrift 14s linear infinite}
+}
 
 /* Hover: cards lift, card photos zoom */
 .card,.rcard,.post,.connect-card,.stat{transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease}
@@ -376,7 +348,6 @@ a.rcard:hover img,.post:hover img{transform:scale(1.06)}
 .nav-links a{transition:color .2s ease, background .2s ease}
 
 /* Small life: pulsing VS badge and "you are here" dot on the timeline */
-.v-mid{animation:vsPulse 2.8s ease-in-out infinite}
 .t-item:last-child::before{animation:ping 2s ease-out infinite}
 
 /* Scroll progress line at the very top (browsers that support scroll-driven animations) */
@@ -388,3 +359,181 @@ a.rcard:hover img,.post:hover img{transform:scale(1.06)}
 .js .reveal{opacity:0; translate:0 26px;
   transition:opacity .7s ease var(--d,0ms), translate .7s cubic-bezier(.2,.7,.2,1) var(--d,0ms), transform .25s ease, border-color .25s ease, box-shadow .25s ease}
 .js .reveal.in{opacity:1; translate:0 0}
+
+
+/* ---------- Fix: the global "section{padding}" rule must not pad the hero ---------- */
+.hero-carousel{padding:0}
+
+/* ---------- Hero: fuller edges (photos run to the right edge, stats on the left) ---------- */
+.slide .hero-stat strong,.hero-stat strong{display:block}
+.hero-stats{display:flex; flex-wrap:wrap; gap:14px clamp(22px,3vw,52px); margin-top:26px; padding-top:20px; border-top:1px solid rgba(255,255,255,.14)}
+.hero-stat strong{font-size:clamp(28px,2.6vw,42px); font-weight:700; letter-spacing:-.03em; line-height:1; color:var(--ink)}
+.hero-stat span{display:block; margin-top:6px; font-size:12.5px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; color:var(--muted)}
+
+.hero-collage{display:grid; grid-template-columns:1.15fr 1fr; grid-template-rows:1fr 1fr; gap:10px; height:clamp(400px,58vh,620px)}
+.hero-collage .tile-0{grid-row:1 / 3}
+.hero-collage.c1{grid-template-columns:1fr; grid-template-rows:1fr}
+.hero-collage.c2 .tile-1{grid-row:1 / 3}
+.collage-tile{margin:0; position:relative; overflow:hidden; min-height:0; border-radius:4px; box-shadow:0 0 0 1px rgba(255,255,255,.08), 0 24px 60px -28px rgba(0,0,0,.8)}
+.collage-tile:nth-child(n+2){border-radius:4px 0 0 4px}
+.collage-tile img{width:100%; height:100%; object-fit:cover; object-position:center 30%}
+.collage-tile figcaption{position:absolute; left:12px; bottom:12px; max-width:calc(100% - 24px); background:rgba(5,7,12,.78); color:#F4F7FB; backdrop-filter:blur(6px); font-size:12.5px; font-weight:600; padding:6px 11px; border-radius:4px}
+
+@media(min-width:861px){
+  .slide .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  .hero-collage{margin-right:calc(-1 * var(--bleed))}
+  /* moment slides: the single photo runs to the right edge too */
+  .slide .hero-photo{margin-right:calc(-1 * var(--bleed)); border-radius:4px 0 0 4px}
+  .slide .hero-photo img{height:clamp(400px,58vh,620px); aspect-ratio:auto; border-radius:4px 0 0 4px}
+}
+@media(max-width:860px){
+  .hero-collage{height:auto; aspect-ratio:4/3}
+}
+
+/* ---------- Story: the visual journey ---------- */
+.journey-steps{list-style:none; margin:6px 0 0; padding:0; display:grid; grid-template-columns:repeat(var(--n),minmax(0,1fr)); gap:22px}
+.j-step{position:relative; display:flex; flex-direction:column; min-width:0}
+.j-rail{display:flex; align-items:center; gap:12px; margin:0 -22px 16px 0}
+.j-step.is-last .j-rail{margin-right:0}
+.j-rail::after{content:""; flex:1; height:2px; background:linear-gradient(90deg,var(--accent),#2b3a55)}
+.j-step.is-last .j-rail::after{background:linear-gradient(90deg,var(--accent),transparent)}
+.j-dot{width:14px; height:14px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 4px var(--accent-soft); flex:none}
+.j-step.is-last .j-dot{animation:ping 2s ease-out infinite}
+.j-year{font-size:clamp(24px,2.2vw,34px); font-weight:800; letter-spacing:-.03em; line-height:1}
+.j-now{font-size:11px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#fff; background:var(--btn); padding:3px 8px; border-radius:4px}
+.j-card{display:flex; flex-direction:column; flex:1; text-decoration:none; background:var(--surface); border:1px solid var(--line); border-top:2px solid var(--line); border-radius:6px; overflow:hidden; transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease}
+.j-card:hover{border-top-color:var(--accent); transform:translateY(-4px); box-shadow:0 16px 34px -20px rgba(37,99,235,.7)}
+.j-art{position:relative; display:grid; place-items:center; aspect-ratio:4/3; overflow:hidden; flex:none}
+.j-art img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover; transition:transform .5s ease}
+.j-card:hover .j-art img{transform:scale(1.06)}
+.j-art.t1{background:linear-gradient(135deg,#0A1F44,#0D3B8C)}
+.j-art.t2{background:linear-gradient(135deg,#052A3A,#0B6E8F)}
+.j-art.t3{background:linear-gradient(135deg,#12153A,#3441B8)}
+.j-art.t4{background:linear-gradient(135deg,#0B1730,#1D4F91)}
+.j-art.t5{background:linear-gradient(135deg,#101A2E,#2A3B66)}
+.j-mark{position:absolute; right:-6px; bottom:-14px; font-size:clamp(70px,7vw,120px); font-weight:800; letter-spacing:-.04em; line-height:1; color:rgba(255,255,255,.08)}
+.j-emoji{position:relative; font-size:clamp(46px,4.4vw,72px); filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+.j-body{display:flex; flex-direction:column; gap:8px; padding:16px 18px 20px; flex:1}
+.j-place{font-size:11.5px; font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:var(--accent)}
+.j-title{font-size:18px; font-weight:700; letter-spacing:-.015em; line-height:1.25; color:var(--ink)}
+.j-text{font-size:14.5px; color:var(--muted); display:-webkit-box; -webkit-line-clamp:4; -webkit-box-orient:vertical; overflow:hidden}
+.j-body .tags{margin-top:4px}
+.j-go{margin-top:auto; padding-top:8px; font-weight:700; font-size:14px; color:var(--accent)}
+.j-card:hover .j-go{text-decoration:underline}
+
+/* narrower screens: a vertical path with a card per station */
+@media(max-width:1000px){
+  .journey-steps{grid-template-columns:1fr; gap:28px; padding-left:30px; margin-left:6px; border-left:2px solid var(--line)}
+  .j-rail{position:relative; margin:0 0 12px}
+  .j-rail::after{display:none}
+  .j-dot{position:absolute; left:-38px; top:50%; translate:0 -50%}
+  .j-card{flex-direction:row}
+  .j-art{flex:0 0 38%; aspect-ratio:auto; min-height:190px}
+}
+@media(max-width:600px){
+  .j-card{flex-direction:column}
+  .j-art{flex:none; aspect-ratio:16/10; min-height:0}
+}
+
+/* ---------- Hero in a centered container, with free space on both sides (like the NVIDIA page) ---------- */
+:root{--hero-w:1290px}
+.hero-carousel .wrap{max-width:calc(var(--hero-w) + 2 * var(--gutter))}
+.slide h1{font-size:clamp(34px,3.7vw,58px)}
+.slide-title{font-size:clamp(32px,3.6vw,56px)}
+@media(min-width:861px){
+  .hero-collage,.slide .hero-photo{margin-right:0}
+  .slide .hero-photo,.slide .hero-photo img{border-radius:4px}
+}
+.collage-tile:nth-child(n+2){border-radius:4px}
+
+/* Shorter screens (laptops): keep the whole hero, including the tabs, on the first screen */
+@media(min-width:861px) and (max-height:860px){
+  .slide{padding:22px 0 100px; min-height:0}
+  .slide h1{margin-bottom:10px}
+  .slide .lead{margin-bottom:14px}
+  .hero-stats{margin-top:14px; padding-top:12px}
+  .hero-collage,.slide .hero-photo img{height:clamp(320px,52vh,480px)}
+}
+
+/* ---------- Card rows, NVIDIA style ----------
+   Title + arrows + description sit in the centered container (same width as the hero).
+   The strip of cards is as wide as the SCREEN: it starts to the right of the description and runs off
+   the right edge. Scrolling slides the cards left over the empty area, up to the left edge of the screen. */
+:root{--row-intro:clamp(260px,26vw,460px); --row-gap:40px}
+.rows-zone{overflow-x:clip}
+.rows{max-width:calc(var(--hero-w) + 2 * var(--gutter)); margin:0 auto; padding:34px var(--gutter) 6px}
+.row{display:block; padding:30px 0 22px; border-top:1px solid var(--line)}
+.row-head{display:flex; align-items:center; justify-content:space-between; gap:16px; margin-bottom:20px}
+.row-head h2{margin:0; font-size:clamp(26px,2.5vw,38px); font-weight:700; letter-spacing:-.025em; line-height:1.1}
+.row-arrows{margin:0}
+.row-stage{position:relative}
+.row-intro{position:absolute; top:0; left:0; width:var(--row-intro); transition:opacity .3s ease}
+.row.scrolled .row-intro{opacity:0; pointer-events:none}
+.row-track{position:relative; z-index:1; display:flex; gap:16px; overflow-x:auto; overscroll-behavior-x:contain;
+  scroll-snap-type:none; scrollbar-width:none; pointer-events:none;
+  margin-inline:calc(50% - 50vw);
+  padding:10px calc(50vw - 50%) 26px calc(50vw - 50% + var(--row-intro) + var(--row-gap))}
+.row-track::-webkit-scrollbar{display:none}
+.row-track .rcard{pointer-events:auto}
+.rcard{flex:0 0 min(clamp(280px,21vw,420px),78vw); scroll-snap-align:none}
+@media(max-width:860px){
+  .row-intro{position:static; width:auto; margin-bottom:14px}
+  .row.scrolled .row-intro{opacity:1; pointer-events:auto}
+  .row-track{padding-left:calc(50vw - 50%)}
+}
+
+/* ---------- Sections 1, 2, 6 and 7 use the same centered width as the hero (free space on both sides) ---------- */
+#story,#present section,#work,#future{max-width:var(--hero-w); margin-inline:auto}
+
+/* ---------- Card rows: the description column is exactly as wide as one card ---------- */
+:root{--card-w:clamp(280px,21vw,420px); --row-intro:var(--card-w)}
+.rcard{flex:0 0 min(var(--card-w),78vw)}
+@media(max-width:860px){ .row-intro{width:min(var(--card-w),78vw)} }
+
+/* ---------- Card rows: card size is unchanged, but the first card starts further left so that
+   at least 3.25 cards are visible before scrolling. The description column uses the space that is left. ---------- */
+:root{
+  --row-gap:28px;
+  --row-left:max(var(--gutter), calc((100vw - var(--hero-w)) / 2));
+  --card-w:clamp(280px,21vw,420px);
+  /* where the first card starts, measured from the left edge of the container */
+  --row-offset:min(calc(var(--card-w) + var(--row-gap)), calc(100vw - var(--row-left) - 3.3 * var(--card-w) - 48px));
+  --row-intro:calc(var(--row-offset) - var(--row-gap));
+}
+/* not enough room beside the cards: put the description above them and start the cards at the left edge */
+@media(max-width:1240px){
+  .row-intro{position:static; width:min(var(--card-w),78vw); margin-bottom:14px}
+  .row.scrolled .row-intro{opacity:1; pointer-events:auto}
+  .row-track{padding-left:calc(50vw - 50%)}
+}
+
+/* ---------- Section 8 (Connect) and the footer use the same centered width as Section 1 ---------- */
+#connect{max-width:var(--hero-w); margin-inline:auto}
+.site-footer .wrap{max-width:calc(var(--hero-w) + 2 * var(--gutter))}
+
+/* ---------- Footer (About me / Moments / Connect) has the same navy background as the opening slide ---------- */
+.site-footer{background:linear-gradient(120deg,#06122a 0%,#0b2a5c 130%); border-top-color:rgba(255,255,255,.12)}
+.site-footer .foot-bottom{border-top-color:rgba(255,255,255,.14)}
+
+
+/* ---------- Footer pattern: faint circuit traces + a soft glow, full strength from the left edge up to 30%, then fading out toward the right ---------- */
+.site-footer{position:relative; overflow:hidden;
+  background:radial-gradient(700px 360px at 6% 60%, rgba(76,155,255,.20), transparent 70%), linear-gradient(120deg,#06122a 0%,#0b2a5c 130%)}
+.site-footer::before{content:""; position:absolute; inset:0; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240' viewBox='0 0 240 240' fill='none' stroke='%234C9BFF' stroke-opacity='.34' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M34 40H96L116 60V110'/%3E%3Ccircle cx='30' cy='40' r='4'/%3E%3Ccircle cx='116' cy='114' r='4'/%3E%3Cpath d='M150 170V196L170 216H220'/%3E%3Ccircle cx='150' cy='166' r='4'/%3E%3Ccircle cx='224' cy='216' r='4'/%3E%3Cpath d='M190 20H214L226 32V76'/%3E%3Ccircle cx='186' cy='20' r='3'/%3E%3Ccircle cx='226' cy='80' r='3'/%3E%3Cpath d='M20 150H60L76 166V210'/%3E%3Ccircle cx='16' cy='150' r='3'/%3E%3C/svg%3E"); background-size:260px 260px;
+  -webkit-mask-image:linear-gradient(90deg, #000 0%, #000 30%, transparent 65%);
+  mask-image:linear-gradient(90deg, #000 0%, #000 30%, transparent 65%)}
+.site-footer>.wrap{position:relative; z-index:1}
+
+/* ---------- Header: logo and menu use the same centered width as the sections below ---------- */
+.nav .nav-inner{max-width:calc(var(--hero-w) + 2 * var(--gutter)); padding-left:var(--gutter); padding-right:var(--gutter)}
+
+/* ---------- Card rows: scrolling works anywhere on the strip, not only when the cursor is on a card ----------
+   The strip (full screen width) now receives the mouse/trackpad/touch. The description sits ABOVE it but lets
+   everything pass through, except its link. */
+.row-track{pointer-events:auto}
+@media(min-width:1241px){
+  .row-intro{z-index:2; pointer-events:none}
+  .row-intro .row-link{pointer-events:auto}
+  .row.scrolled .row-link{pointer-events:none}
+}

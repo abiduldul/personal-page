@@ -24,7 +24,7 @@ Put your photos in **that same folder**, fill in the header, write the story, an
 - the **hero** at the top of the home page, if it has a photo (the 5 newest with photos)
 - a **photo row** on the home page for its `album` (every photo of every moment in that album)
 - a **tag page** for each tag, e.g. `/tags/hiking/`
-- the **"How I got here"** timeline, if you set `milestone: true`
+- the **"How I got here"** story, if you set `milestone: true` (add a `cover` photo, or an `emoji` if you have no photo)
 
 ### Header fields
 
@@ -37,7 +37,8 @@ Put your photos in **that same folder**, fill in the header, write the story, an
 | `summary`   | no  | one line shown on cards and the timeline |
 | `tags`      | no  | `[hiking, travel]` |
 | `album`     | no  | `campus`, `coast`, `mountains`, or a new one — becomes a photo row on the home page |
-| `milestone` | no  | `true` = also in the "How I got here" timeline |
+| `milestone` | no  | `true` = also a station in the "How I got here" story on the home page |
+| `emoji`     | no  | `"🤖"` — the big picture of a milestone card that has no photo |
 | `cover`     | no  | `./photo.jpg` (otherwise the first photo is used) |
 | `photos`    | no  | list of `{ src, alt, caption }` |
 | `draft`     | no  | `true` = kept here but **not published** — good for private memories |
@@ -53,7 +54,7 @@ Put your photos in **that same folder**, fill in the header, write the story, an
 
 | What | File |
 |------|------|
-| Name, bio, present, stats, skills, rival, future, links, project row titles | `src/data/profile.json` |
+| Name, bio, present, stats, skills, future, links, project row titles | `src/data/profile.json` |
 | Projects (each has a `group` = which row it appears in) | `src/data/projects.json` |
 | Work experience | `src/data/experience.json` |
 | Hero photo | `src/assets/hero.jpg` |

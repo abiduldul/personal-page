@@ -6,6 +6,8 @@ place: "Yogyakarta"
 summary: "Moved to Yogyakarta for my master's at UGM and started my Telegram diary, Susanto."
 tags: [ugm, study, susanto]
 milestone: true
+emoji: "🎓"
+cover: ../2024-ugm-campus/courtyard.jpg
 ---
 
 I moved to Yogyakarta for my master's at Universitas Gadjah Mada (UGM) and started my Telegram

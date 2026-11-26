@@ -129,6 +129,7 @@ personal-page/
 │   ├── pages/             ← every file here = one URL on the site
 │   ├── components/        ← reusable pieces
 │   │   ├── HeroCarousel.astro  ← the rotating hero at the top of the home page
+│   │   ├── Journey.astro       ← the "How I got here" story (one card per milestone moment)
 │   │   ├── CardRow.astro       ← a title + sideways-scrolling strip of cards
 │   │   ├── RowCard.astro       ← one card inside a row
 │   │   ├── PostCard.astro      ← a moment card (used on /moments/ and tag pages)

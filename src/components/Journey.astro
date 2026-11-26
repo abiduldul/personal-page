@@ -1,0 +1,47 @@
+---
+// "How I got here": the milestones as a visual journey. One station per milestone moment,
+// left to right across the full width, each with a picture (photo, or a big emoji tile), a year,
+// a short text and tags. On phones it turns into a vertical path.
+import { Image } from 'astro:assets';
+import type { Moment } from '../lib';
+
+interface Props { moments: Moment[] } // oldest first
+const { moments } = Astro.props;
+const tones = ['t1', 't2', 't3', 't4', 't5'];
+---
+<div class="journey" style={`--n:${moments.length}`}>
+  <ol class="journey-steps">
+    {moments.map((m, i) => {
+      const d = m.data;
+      const year = d.date.getUTCFullYear();
+      const photo = d.cover ?? d.photos[0]?.src;
+      const isLast = i === moments.length - 1;
+      return (
+        <li class:list={['j-step', { 'is-last': isLast }]}>
+          <div class="j-rail">
+            <span class="j-dot" aria-hidden="true"></span>
+            <span class="j-year">{year}</span>
+            {isLast && <span class="j-now">Now</span>}
+          </div>
+          <a class="j-card" href={`/moments/${m.id}/`}>
+            <span class={`j-art ${tones[i % tones.length]}`}>
+              {photo
+                ? <Image src={photo} alt="" widths={[420, 800]} sizes="(max-width: 1000px) 90vw, 20vw" />
+                : <>
+                    <span class="j-mark" aria-hidden="true">{year}</span>
+                    <span class="j-emoji" aria-hidden="true">{d.emoji ?? '★'}</span>
+                  </>}
+            </span>
+            <span class="j-body">
+              {d.place && <span class="j-place">{d.place}</span>}
+              <span class="j-title">{d.title}</span>
+              {d.summary && <span class="j-text">{d.summary}</span>}
+              {d.tags.length > 0 && <span class="tags">{d.tags.slice(0, 3).map((t) => <span class="tag">#{t}</span>)}</span>}
+              <span class="j-go">Read the story →</span>
+            </span>
+          </a>
+        </li>
+      );
+    })}
+  </ol>
+</div>

@@ -35,7 +35,6 @@ const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — 
         <a href="/#photos">Photos</a>
         <a href="/#projects">Projects</a>
         <a href="/#work">Work</a>
-        <a href="/#rival">Rival</a>
         <a href="/#connect">Connect</a>
       </nav>
     </div>
@@ -52,8 +51,8 @@ const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — 
 
     if (!reduce) {
       const targets = [
-        '.section-head', '.ppf a', '.t-item', '.card', '.stat', '.rows > .kicker', '.row', '.work-row',
-        '.skills', '.v-side', '.v-mid', '.rival-note', '.purpose', '.phase', '.connect-card',
+        '.section-head', '.j-step', '.card', '.stat', '.rows > .kicker', '.row', '.work-row',
+        '.skills', '.purpose', '.phase', '.connect-card',
         '.foot-cols > div', '.tag-cloud', '.year', '.moment > *',
       ].join(',');
 
@@ -89,6 +88,7 @@ const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — 
         { threshold: 0.12, rootMargin: '0px 0px -6% 0px' },
       );
 
+
       document.querySelectorAll<HTMLElement>(targets).forEach((el) => {
         const i = el.parentElement ? [...el.parentElement.children].indexOf(el) : 0;
         el.style.setProperty('--d', Math.min(i, 6) * 80 + 'ms'); // stagger siblings
@@ -99,7 +99,7 @@ const fullTitle = title ? `${title} — ${profile.name}` : `${profile.name} — 
 
     // Highlight the menu link of the section being read (home page only)
     const links = [...document.querySelectorAll<HTMLAnchorElement>('.nav-links a')];
-    const secs = ['story', 'moments', 'photos', 'projects', 'work', 'rival', 'connect']
+    const secs = ['story', 'moments', 'photos', 'projects', 'work', 'connect']
       .map((id) => document.getElementById(id))
       .filter((s): s is HTMLElement => !!s);
     if (secs.length) {

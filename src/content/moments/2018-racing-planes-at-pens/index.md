@@ -6,6 +6,7 @@ place: "PENS, Surabaya"
 summary: "Electrical designer and pilot in the Racing Plane Division at Dirgantara PENS — finished KRTI 2020."
 tags: [pens, racing-plane, avionics, krti]
 milestone: true
+emoji: "✈️"
 ---
 
 Electrical designer and pilot in the Racing Plane Division at Dirgantara PENS (2018 — 2020).

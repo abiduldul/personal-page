@@ -17,6 +17,8 @@ const moments = defineCollection({
       // If you only remember the year or month, set this and only that part is shown.
       approx: z.enum(['year', 'month']).optional(),
       place: z.string().optional(),
+      // Shown big on cards that have no photo (the "How I got here" story, for example)
+      emoji: z.string().optional(),
       summary: z.string().optional(),
       tags: z.array(z.string()).default([]),
       // Photo row on the home page: campus, coast, mountains, ...

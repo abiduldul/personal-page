@@ -4,6 +4,7 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import profile from '../data/profile.json';
+import projects from '../data/projects.json';
 import heroImg from '../assets/hero.jpg';
 import { formatDate, type Moment } from '../lib';
 
@@ -18,6 +19,15 @@ const slides = moments
   .slice(0, 5)
   .map((s, i) => ({ ...s, variant: variants[i % variants.length] }));
 const total = slides.length + 1;
+
+// Intro slide: a collage that runs to the right edge of the screen (my photo + a mountain + a coast photo)
+const pick = (album: string) => slides.find((s) => s.m.data.album === album);
+const extras = [pick('mountains'), pick('coast')].filter((s): s is (typeof slides)[number] => !!s);
+const collage = [
+  { src: heroImg as ImageMetadata, alt: profile.heroAlt, caption: profile.heroCaption },
+  ...extras.map((s) => ({ src: s.image, alt: s.m.data.photos[0]?.alt ?? s.m.data.title, caption: s.m.data.title })),
+];
+const photoCount = moments.reduce((n, m) => n + m.data.photos.length, 0);
 ---
 <section class="hero-carousel" data-hero style={`--dur:${SECONDS}s`} aria-roledescription="carousel" aria-label="Featured">
   <div class="slides">
@@ -34,11 +44,20 @@ const total = slides.length + 1;
           <div class="meta-row">
             {profile.chips.map((c) => <span class="chip" set:html={c} />)}
           </div>
+          <div class="hero-stats" aria-label="My site in numbers">
+            <div class="hero-stat"><strong>{moments.length}</strong><span>Moments</span></div>
+            <div class="hero-stat"><strong>{photoCount}</strong><span>Photos</span></div>
+            <div class="hero-stat"><strong>{projects.length}</strong><span>Projects</span></div>
+          </div>
         </div>
-        <figure class="hero-photo">
-          <Image src={heroImg} alt={profile.heroAlt} widths={[480, 900]} sizes="(max-width: 860px) 100vw, 460px" loading="eager" />
-          <figcaption>{profile.heroCaption}</figcaption>
-        </figure>
+        <div class={`hero-collage c${collage.length}`}>
+          {collage.map((c, i) => (
+            <figure class={`collage-tile tile-${i}`}>
+              <Image src={c.src} alt={c.alt} widths={[480, 900]} sizes="(max-width: 860px) 100vw, 40vw" loading={i === 0 ? 'eager' : 'lazy'} />
+              <figcaption>{c.caption}</figcaption>
+            </figure>
+          ))}
+        </div>
       </div>
     </div>
 
@@ -118,9 +137,12 @@ const total = slides.length + 1;
       pauseBtn.textContent = userPaused ? '▶' : '❚❚';
       setPaused(userPaused);
     });
-    root.addEventListener('mouseenter', () => setPaused(true));
-    root.addEventListener('mouseleave', () => setPaused(userPaused));
-    root.addEventListener('focusin', () => setPaused(true));
+    // The slideshow keeps running with the mouse over it, and after a click on a tab.
+    // It only pauses (a) with the pause button, or (b) while someone is tabbing through it with the
+    // keyboard (:focus-visible), so they have time to read. A mouse click does not count as that.
+    root.addEventListener('focusin', (e) => {
+      if ((e.target as HTMLElement).matches(':focus-visible')) setPaused(true);
+    });
     root.addEventListener('focusout', () => setPaused(userPaused));
   }
 </script>

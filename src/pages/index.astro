@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import HeroCarousel from '../components/HeroCarousel.astro';
 import CardRow from '../components/CardRow.astro';
 import RowCard from '../components/RowCard.astro';
+import Journey from '../components/Journey.astro';
 import { getMoments, formatDate, albumLabel, albumText } from '../lib';
 import profile from '../data/profile.json';
 import projects from '../data/projects.json';
@@ -27,25 +28,13 @@ const projectRows = profile.projectGroups.map((g) => ({ ...g, items: projects.fi
   <HeroCarousel moments={moments} />
 
   <main class="wrap">
-    <div class="ppf" aria-label="Past, present and future">
-      {profile.ppf.map((p) => <a href={p.href}><small>{p.label}</small><h3>{p.title}</h3><p>{p.text}</p></a>)}
-    </div>
-
     <section id="story">
       <div class="section-head">
         <span class="kicker">01 — Past · My Story</span>
         <h2>How I got here</h2>
         <p>An embedded electronics enthusiast from the start — focused on microcontroller programming, circuit analysis, and system integration. This is the road so far.</p>
       </div>
-      <div class="timeline">
-        {milestones.map((m) => (
-          <div class="t-item">
-            <div class="when">{formatDate(m.data.date, m.data.approx)}{m.data.place && ` · ${m.data.place}`}</div>
-            <h3><a href={`/moments/${m.id}/`}>{m.data.title}</a></h3>
-            {m.data.summary && <p>{m.data.summary}</p>}
-          </div>
-        ))}
-      </div>
+      <Journey moments={milestones} />
     </section>
   </main>
 
@@ -67,7 +56,8 @@ const projectRows = profile.projectGroups.map((g) => ({ ...g, items: projects.fi
     </div>
   </div>
 
-  <main class="wrap">
+  <!-- The three card-row sections live in a full-width zone: their cards run to the edges of the screen -->
+  <div class="rows-zone">
     <section id="moments" class="rows">
       <span class="kicker">03 — Moments</span>
       <CardRow title="Latest moments" text="My life as a feed. Every moment has its own page with the full story and photos." link={{ href: '/moments/', label: `See all ${moments.length} moments` }}>
@@ -112,7 +102,9 @@ const projectRows = profile.projectGroups.map((g) => ({ ...g, items: projects.fi
         </CardRow>
       ))}
     </section>
+  </div>
 
+  <main class="wrap">
     <section id="work">
       <div class="section-head">
         <span class="kicker">06 — Work</span>
@@ -125,33 +117,9 @@ const projectRows = profile.projectGroups.map((g) => ({ ...g, items: projects.fi
       <div class="skills" aria-label="Skills">{profile.skills.map((s) => <span class="skill">{s}</span>)}</div>
     </section>
 
-    <section id="rival">
-      <div class="section-head">
-        <span class="kicker">07 — {profile.rival.kicker}</span>
-        <h2>{profile.rival.title}</h2>
-        <p>{profile.rival.text}</p>
-      </div>
-      <div class="versus">
-        <div class="v-side rival">
-          <small>{profile.rival.them.label}</small>
-          <h3>{profile.rival.them.name}</h3>
-          <p class="sub">{profile.rival.them.sub}</p>
-          <ul>{profile.rival.them.points.map((x) => <li>{x}</li>)}</ul>
-        </div>
-        <div class="v-mid" aria-hidden="true">VS</div>
-        <div class="v-side">
-          <small>{profile.rival.me.label}</small>
-          <h3>{profile.rival.me.name}</h3>
-          <p class="sub">{profile.rival.me.sub}</p>
-          <ul>{profile.rival.me.points.map((x) => <li>{x}</li>)}</ul>
-        </div>
-      </div>
-      <p class="rival-note">{profile.rival.note}</p>
-    </section>
-
     <section id="future">
       <div class="purpose">
-        <span class="kicker">08 — Future · Big Purpose</span>
+        <span class="kicker">07 — Future · Big Purpose</span>
         <h2 set:html={profile.future.headline} />
         <p>{profile.future.text}</p>
       </div>
@@ -164,7 +132,7 @@ const projectRows = profile.projectGroups.map((g) => ({ ...g, items: projects.fi
 
     <section id="connect">
       <div class="section-head">
-        <span class="kicker">09 — Connect</span>
+        <span class="kicker">08 — Connect</span>
         <h2>Find me here</h2>
         <p>This page is my home base — but the conversation happens on these.</p>
       </div>
